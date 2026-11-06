@@ -1,0 +1,123 @@
+{
+  "_about": "Everything the demo adds. Edit labels or swap files here; see README.md.",
+  "types": [
+    {
+      "name": "BaggyPants",
+      "category": "bottom",
+      "stockName": "ClothBottomsUgcPantsLong",
+      "model": "models/BaggyPants.bfres.zs",
+      "modelName": "BaggyPants.bfres.zs",
+      "normalMapName": "TLN_BaggyPants_Nrm______________",
+      "files": [
+        {
+          "url": "textures/BaggyPants/normal-map.bntx.zs",
+          "path": "romfs/Tex/TLN_BaggyPants_Nrm______________.bntx.zs",
+          "rst": [
+            "Tex/TLN_BaggyPants_Nrm______________.bntx",
+            614736
+          ]
+        },
+        {
+          "url": "textures/BaggyPants/blank-albedo.bntx.zs",
+          "path": "romfs/Tex/ClothBottomsUgcPantsLong_Body_Alb.bntx.zs"
+        },
+        {
+          "url": "textures/BaggyPants/low-detail.bntx.zs",
+          "path": "romfs/Tex/Lo/ClothBottomsUgcPantsLong.bntx.zs"
+        }
+      ],
+      "items": [
+        {
+          "label": "White Baggy Pants",
+          "image": "images/white-baggy-pants.png",
+          "painting": "paintings/white-baggy-pants.ugctex.zs",
+          "canvas": "paintings/white-baggy-pants.canvas.zs",
+          "thumbnail": "paintings/white-baggy-pants.thumb.ugctex.zs"
+        },
+        {
+          "label": "Red Baggy Pants",
+          "image": "images/red-baggy-pants.png",
+          "painting": "paintings/red-baggy-pants.ugctex.zs",
+          "canvas": "paintings/red-baggy-pants.canvas.zs",
+          "thumbnail": "paintings/red-baggy-pants.thumb.ugctex.zs"
+        }
+      ]
+    },
+    {
+      "name": "BeeHat",
+      "category": "hat",
+      "stockName": "ClothHeadwearHatUgcBoater",
+      "model": "models/BeeHelmet.bfres.zs",
+      "modelName": "BeeHelmet.bfres.zs",
+      "normalMapName": null,
+      "files": [
+        {
+          "url": "textures/BeeHat/blank-albedo.bntx.zs",
+          "path": "romfs/Tex/ClothHeadwearHatUgcBoater_Body_Alb.bntx.zs"
+        },
+        {
+          "url": "textures/BeeHat/low-detail.bntx.zs",
+          "path": "romfs/Tex/Lo/ClothHeadwearHatUgcBoater.bntx.zs"
+        }
+      ],
+      "items": [
+        {
+          "label": "Yellow Bee Helmet",
+          "image": "images/yellow-bee-helmet.png",
+          "painting": "paintings/yellow-bee-helmet.ugctex.zs",
+          "canvas": "paintings/yellow-bee-helmet.canvas.zs",
+          "thumbnail": "paintings/yellow-bee-helmet.thumb.ugctex.zs"
+        },
+        {
+          "label": "Blue Bee Helmet",
+          "image": "images/blue-bee-helmet.png",
+          "painting": "paintings/blue-bee-helmet.ugctex.zs",
+          "canvas": "paintings/blue-bee-helmet.canvas.zs",
+          "thumbnail": "paintings/blue-bee-helmet.thumb.ugctex.zs"
+        }
+      ]
+    },
+    {
+      "name": "FancyShirt",
+      "category": "top",
+      "stockName": "ClothTopsUgcTshirtLong",
+      "model": "models/WildShowbizJacket.bfres.zs",
+      "modelName": "WildShowbizJacket.bfres.zs",
+      "normalMapName": "TLN_FancyShirt_Nrm______________",
+      "files": [
+        {
+          "url": "textures/FancyShirt/normal-map.bntx.zs",
+          "path": "romfs/Tex/TLN_FancyShirt_Nrm______________.bntx.zs",
+          "rst": [
+            "Tex/TLN_FancyShirt_Nrm______________.bntx",
+            614736
+          ]
+        },
+        {
+          "url": "textures/FancyShirt/blank-albedo.bntx.zs",
+          "path": "romfs/Tex/ClothTopsUgcTshirtLong_Body_Alb.bntx.zs"
+        },
+        {
+          "url": "textures/FancyShirt/low-detail.bntx.zs",
+          "path": "romfs/Tex/Lo/ClothTopsUgcTshirtLong.bntx.zs"
+        }
+      ],
+      "items": [
+        {
+          "label": "Wild Showbiz Jacket",
+          "image": "images/wild-showbiz-jacket.png",
+          "painting": "paintings/wild-showbiz-jacket.ugctex.zs",
+          "canvas": "paintings/wild-showbiz-jacket.canvas.zs",
+          "thumbnail": "paintings/wild-showbiz-jacket.thumb.ugctex.zs"
+        },
+        {
+          "label": "Red Showbiz Jacket",
+          "image": "images/red-showbiz-jacket.png",
+          "painting": "paintings/red-showbiz-jacket.ugctex.zs",
+          "canvas": "paintings/red-showbiz-jacket.canvas.zs",
+          "thumbnail": "paintings/red-showbiz-jacket.thumb.ugctex.zs"
+        }
+      ]
+    }
+  ]
+}

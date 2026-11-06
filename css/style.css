@@ -1,0 +1,486 @@
+/* ==================================================================== */
+/* Closet Forge Demo: stylesheet                                         */
+/* Colours are the variables in the first two blocks. Change them there. */
+/* ==================================================================== */
+
+/* ------------------------------------------------------------------ */
+/* Colours: light theme (default)                                       */
+/* ------------------------------------------------------------------ */
+:root {
+  --bg: #c1e7ee;
+  /* page background */
+  --band: #091e7c;
+  /* title band */
+  --band-ink: #ffffff;
+  /* text on the title band */
+  --band-soft: #98ecda;
+  /* secondary text on the title band */
+  --panel: #ffffff;
+  /* card background */
+  --ink: #170d33;
+  /* main text */
+  --muted: #231f68;
+  /* secondary text */
+  --line: #2528e4;
+  /* borders */
+  --accent: #3969ee;
+  /* buttons, step numbers */
+  --accent-ink: #ffffff;
+  /* text on accent colour */
+  --accent-soft: #cff1ff;
+  /* hover tint */
+  --bad: #c0301f;
+  /* errors */
+  --ok: #1f8a4c;
+  /* success */
+  --code: #fff6dc;
+  /* code / log background */
+  --field: #eaffff;
+  /* drop zones, file list */
+  --f-body: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+
+/* ------------------------------------------------------------------ */
+/* Colours: dark theme. Used when the system is dark and nothing has    */
+/* been chosen yet, or when the theme button picks dark.                */
+/* ------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131314;
+    --band: #091e7c;
+    --band-ink: #ffffff;
+    --band-soft: #98ecda;
+    --panel: #11253b;
+    --ink: #d6dcf6;
+    --muted: #8ab3b9;
+    --line: #31a8a8;
+    --accent: #38ffff;
+    --accent-ink: #131314;
+    --accent-soft: #144a47;
+    --bad: #ff8a78;
+    --ok: #6fd49a;
+    --code: #151830;
+    --field: #131314;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #131314;
+  --band: #091e7c;
+  --band-ink: #ffffff;
+  --band-soft: #98ecda;
+  --panel: #11253b;
+  --ink: #d6dcf6;
+  --muted: #8ab3b9;
+  --line: #31a8a8;
+  --accent: #38ffff;
+  --accent-ink: #131314;
+  --accent-soft: #144a47;
+  --bad: #ff8a78;
+  --ok: #6fd49a;
+  --code: #151830;
+  --field: #131314;
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page structure                                                       */
+/* ------------------------------------------------------------------ */
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* so elements with the hidden attribute stay hidden even when a rule below sets display */
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+h2 {
+  font-size: 19px;
+  margin: 0;
+  font-weight: 800;
+}
+
+p {
+  margin: 0;
+}
+
+.inner {
+  /* centred column, 900px wide */
+  max-width: 900px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+main {
+  padding-block: 26px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lede {
+  max-width: 64ch;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Title band                                                           */
+/* Name on the left (with a little hanger), game version underneath it, */
+/* round theme button on the right. A dashed "stitch" runs along the    */
+/* bottom edge.                                                         */
+/* ------------------------------------------------------------------ */
+.band {
+  background: var(--band);
+  color: var(--band-ink);
+  padding-block: 22px 20px;
+  border-bottom: 4px dashed var(--accent);
+}
+
+.bandrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.hanger {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  color: var(--band-ink);
+}
+
+.brand h1 {
+  font-size: clamp(26px, 5vw, 36px);
+  line-height: 1.05;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -.015em;
+}
+
+.brand h1 span {
+  font-weight: 600;
+  opacity: .7;
+}
+
+/* the word "Demo" */
+.gamever {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--band-soft);
+  font-weight: 700;
+}
+
+.gamever b {
+  font-family: var(--f-mono);
+  font-weight: 600;
+}
+
+.themebtn {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  flex: none;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--band-soft);
+  color: var(--band-ink);
+  background: transparent;
+}
+
+.themebtn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.themebtn .sun {
+  display: none;
+}
+
+/* moon shows in light mode, sun in dark mode */
+:root[data-theme="dark"] .themebtn .sun {
+  display: block;
+}
+
+:root[data-theme="dark"] .themebtn .moon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .themebtn .sun {
+    display: block;
+  }
+
+  :root:not([data-theme="light"]) .themebtn .moon {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Cards: one per step                                                  */
+/* ------------------------------------------------------------------ */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  width:100%;
+}
+
+.sh {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* step header: number + title */
+.n {
+  /* the round step number */
+  font-size: 13px;
+  font-weight: 900;
+  background: var(--accent);
+  color: var(--accent-ink);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.note {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.note .bold {
+  font-size: 14px;
+  color: var(--accent)
+}
+
+.note b {
+  color: var(--ink);
+}
+
+code {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  background: var(--code);
+  border: 1px solid var(--line);
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Buttons, drop zones, file checklist                                  */
+/* ------------------------------------------------------------------ */
+button {
+  font: inherit;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 10px 20px;
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.drop {
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+  background: var(--field);
+  transition: border-color .15s, background .15s;
+  overflow-wrap: anywhere;
+}
+
+.drop:hover,
+.drop.over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.drop b {
+  color: var(--accent);
+}
+
+.files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 8px;
+}
+
+.files li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 12px;
+  background: var(--field);
+  min-width: 0;
+}
+
+.files .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  flex: none;
+  margin-top: 4px;
+}
+
+.files li.ok {
+  border-color: var(--ok);
+}
+
+.files li.ok .dot {
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
+.files .fn {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.files .where {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Build output                                                         */
+/* ------------------------------------------------------------------ */
+.msg {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  background: var(--code);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 260px;
+  overflow-y: auto;
+  font-weight: 500;
+}
+
+.err {
+  color: var(--bad);
+}
+
+.good {
+  color: var(--ok);
+}
+
+ol.how {
+  margin: 0;
+  padding-left: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ------------------------------------------------------------------ */
+/* "What gets added" gallery                                            */
+/* ------------------------------------------------------------------ */
+.gal {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.gal figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+
+.gal img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--field);
+}
+
+.gal figcaption {
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
