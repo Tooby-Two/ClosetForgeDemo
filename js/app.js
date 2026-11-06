@@ -56,6 +56,8 @@ let freeSlots = [];      // closet slot numbers that are still empty in that sav
 let clothing = null;     // the contents of data/items.json (set in section 3)
 let itemCount = 0;       // how many closet items the pack adds (6)
 let orig = null;         // data/orig.json: stock table rows the generator starts from
+let knownFiles = null;   // data/known-files.json: fingerprints of the real v1.0.4 game files
+const fileMatches = {};  // key -> true (is the 1.0.4 file), false (is not), or missing (couldn't check)
 
 // ------------------------------------------------------------------
 // 3. Loading the clothing list and showing "What gets added"
@@ -64,6 +66,7 @@ async function loadClothingList() {
   try {
     clothing = await (await fetch('data/items.json')).json();
     orig = await (await fetch('data/orig.json')).json();
+    knownFiles = await (await fetch('data/known-files.json')).json().catch(() => null);   // optional: only used for the version warning
   } catch (e) {
     // Browsers block a page opened straight from a folder (file://) from reading its own files.
     $('loadError').hidden = false;
@@ -81,6 +84,20 @@ async function loadClothingList() {
   refreshBuildButton();
 }
 
+// Is this the real v1.0.4 file? We compare a SHA-256 fingerprint of the unzipped file with
+// data/known-files.json. Returns true / false, or undefined when it can't be checked.
+async function matchesGameVersion(key, zsBytes) {
+  const known = knownFiles && knownFiles[key];
+  if (!known || !(window.crypto && crypto.subtle)) return undefined;
+  try {
+    const bytes = TLCore.load(zsBytes);                                   // unzstd
+    if (bytes.length !== known.size) return false;
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    return hex === known.sha256;
+  } catch (e) { return false; }                                           // not even a valid game file
+}
+
 // ------------------------------------------------------------------
 // 4. Drop zones (click, keyboard or drag and drop)
 // ------------------------------------------------------------------
@@ -96,19 +113,29 @@ function wireDropZone(zone, input, onFiles) {
 // Step 1: game files. We match by name, so a "3f983359-" style prefix doesn't matter.
 function drawGameChecklist() {
   $('gameChecks').innerHTML = REQUIRED_GAME_FILES.map(([key, fileName, folder]) => `
-    <li class="${gameTables[key] ? 'ok' : ''}">
+    <li class="${gameTables[key] ? (fileMatches[key] === false ? 'warn' : 'ok') : ''}">
       <span class="dot"></span>
       <div>
         <div class="fn">${fileName}.zs</div>
-        <div class="where">${gameTables[key] ? 'Loaded!' : 'Not Loaded: located in the ' + folder + ' folder'}</div>
+        <div class="where">${!gameTables[key] ? 'Not Loaded: located in the ' + folder + ' folder'
+          : fileMatches[key] === false ? 'Loaded, but this is not the 1.0.4 version of this file' : 'Loaded!'}</div>
       </div>
     </li>`).join('');
+  const wrong = REQUIRED_GAME_FILES.filter(([key]) => gameTables[key] && fileMatches[key] === false);
+  $('versionWarn').hidden = wrong.length === 0;
+  $('versionWarn').textContent = wrong.length === 0 ? '' :
+    `${wrong.length === 1 ? 'One of these files does' : wrong.length + ' of these files do'} not match the 1.0.4 game files. ` +
+    'A mod built from files of another game version can crash the game. Dump them again from the 1.0.4 update, ' +
+    "and make sure they're the original files, not ones from another mod. You can still build, at your own risk.";
   refreshBuildButton();
 }
 wireDropZone($('dropGame'), $('fileGame'), async (files) => {
   for (const file of files) {
     const match = REQUIRED_GAME_FILES.find(([, fileName]) => file.name.includes(fileName));
-    if (match) gameTables[match[0]] = await readFileBytes(file);
+    if (match) {
+      gameTables[match[0]] = await readFileBytes(file);
+      fileMatches[match[0]] = await matchesGameVersion(match[0], gameTables[match[0]]);
+    }
   }
   drawGameChecklist();
 });

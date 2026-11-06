@@ -396,6 +396,15 @@ button:disabled {
   border-color: var(--ok);
 }
 
+.files li.warn {
+  border-color: var(--bad);
+}
+
+.files li.warn .dot {
+  background: var(--bad);
+  border-color: var(--bad);
+}
+
 .files .fn {
   font-family: var(--f-mono);
   font-size: 12.5px;

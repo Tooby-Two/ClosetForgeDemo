@@ -1,0 +1,27 @@
+{
+  "_note": "SHA-256 of the DECOMPRESSED game files from Tomodachi Life: Living the Dream v1.0.4. Used by js/app.js to warn about files from another version.",
+  "typeparam": {
+    "size": 21448,
+    "sha256": "818a78db0446cada10a4d45288acfaa052813458b126c5c81eefc72c8425bf88"
+  },
+  "models": {
+    "size": 315632,
+    "sha256": "8223a8f2f0578b77de6d69033e0f40855cbdfa3ff7b4640b860d9f0e3620972f"
+  },
+  "cloth": {
+    "size": 131600,
+    "sha256": "0ddd650e5041183376937ee8633272436aa5ba76123cfcc281bad20dfaaf078c"
+  },
+  "clothparam": {
+    "size": 4704,
+    "sha256": "ab0aec343c8baf43975e1827e5b93c4583edb7fb3dcddf1b75c0c41b4183c691"
+  },
+  "gdl": {
+    "size": 444236,
+    "sha256": "a982d388b69d9718dfbc0a706a436e0940c4d1ce9126be5332fd11719ff5ebe8"
+  },
+  "rst": {
+    "size": 675862,
+    "sha256": "c3a9aec753e4670145c9e0446f61ee086cc92f2dd8d0e02f031dccfa962d4481"
+  }
+}
