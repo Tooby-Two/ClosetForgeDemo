@@ -19,11 +19,19 @@
         },
         {
           "url": "textures/BaggyPants/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/ClothBottomsUgcPantsLong_Body_Alb.bntx.zs"
+          "path": "romfs/Tex/TLM_BaggyPants_________g_Body_Alb.bntx.zs",
+          "rst": [
+            "Tex/TLM_BaggyPants_________g_Body_Alb.bntx",
+            282960
+          ]
         },
         {
           "url": "textures/BaggyPants/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/ClothBottomsUgcPantsLong.bntx.zs"
+          "path": "romfs/Tex/Lo/TLM_BaggyPants_________g.bntx.zs",
+          "rst": [
+            "Tex/Lo/TLM_BaggyPants_________g.bntx",
+            86376
+          ]
         }
       ],
       "items": [
@@ -41,7 +49,8 @@
           "canvas": "paintings/red-baggy-pants.canvas.zs",
           "thumbnail": "paintings/red-baggy-pants.thumb.ugctex.zs"
         }
-      ]
+      ],
+      "innerName": "TLM_BaggyPants_________g"
     },
     {
       "name": "BeeHat",
@@ -53,11 +62,19 @@
       "files": [
         {
           "url": "textures/BeeHat/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/ClothHeadwearHatUgcBoater_Body_Alb.bntx.zs"
+          "path": "romfs/Tex/TLM_BeeHat______________r_Body_Alb.bntx.zs",
+          "rst": [
+            "Tex/TLM_BeeHat______________r_Body_Alb.bntx",
+            282960
+          ]
         },
         {
           "url": "textures/BeeHat/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/ClothHeadwearHatUgcBoater.bntx.zs"
+          "path": "romfs/Tex/Lo/TLM_BeeHat______________r.bntx.zs",
+          "rst": [
+            "Tex/Lo/TLM_BeeHat______________r.bntx",
+            37200
+          ]
         }
       ],
       "items": [
@@ -75,7 +92,8 @@
           "canvas": "paintings/blue-bee-helmet.canvas.zs",
           "thumbnail": "paintings/blue-bee-helmet.thumb.ugctex.zs"
         }
-      ]
+      ],
+      "innerName": "TLM_BeeHat______________r"
     },
     {
       "name": "FancyShirt",
@@ -95,11 +113,19 @@
         },
         {
           "url": "textures/FancyShirt/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/ClothTopsUgcTshirtLong_Body_Alb.bntx.zs"
+          "path": "romfs/Tex/TLM_FancyShirt_______g_Body_Alb.bntx.zs",
+          "rst": [
+            "Tex/TLM_FancyShirt_______g_Body_Alb.bntx",
+            282960
+          ]
         },
         {
           "url": "textures/FancyShirt/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/ClothTopsUgcTshirtLong.bntx.zs"
+          "path": "romfs/Tex/Lo/TLM_FancyShirt_______g.bntx.zs",
+          "rst": [
+            "Tex/Lo/TLM_FancyShirt_______g.bntx",
+            135552
+          ]
         }
       ],
       "items": [
@@ -117,7 +143,8 @@
           "canvas": "paintings/red-showbiz-jacket.canvas.zs",
           "thumbnail": "paintings/red-showbiz-jacket.thumb.ugctex.zs"
         }
-      ]
+      ],
+      "innerName": "TLM_FancyShirt_______g"
     }
   ]
 }

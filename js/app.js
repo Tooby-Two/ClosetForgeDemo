@@ -178,6 +178,7 @@ async function prepareType(type) {
     name: type.name,
     category: type.category,                              // top / bottom / hat
     model: { name: type.modelName, data: modelBytes },
+    model_internal: type.innerName,                       // the model's own name inside the file; the game loads Tex/<name>_Body_Alb and Tex/Lo/<name> from it
     extra_files: extraFiles,
     preview: 'own', uv_mask: '', no_in: false, variants: 0,
     // Which parts of the Mii's bare body the game hides under this clothing.
