@@ -493,3 +493,71 @@ ol.how {
     transition: none !important;
   }
 }
+
+/* ====================================================================
+   Install steps (collapsible blocks) and the page footer.
+   ==================================================================== */
+
+/* "Switch hardware" / "Ryujinx" blocks */
+details {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--field);
+  padding: 0 14px;
+  margin-top: 10px;
+}
+
+details[open] {
+  padding-bottom: 12px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 800;
+  padding: 12px 0;
+  color: var(--ink);
+}
+
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+details ol.how {
+  margin: 0;
+}
+
+details li {
+  margin-bottom: 8px;
+}
+
+/* Footer */
+.foot {
+  border-top: 2px dashed var(--line);
+  margin-top: 32px;
+  padding: 20px 0 36px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.foot .inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.foot p {
+  margin: 0;
+}
+
+.foot a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Links inside cards (the GitHub link under the install steps) */
+.card a {
+  color: var(--accent);
+  font-weight: 700;
+}

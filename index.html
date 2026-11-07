@@ -12,8 +12,8 @@
   CLOSET FORGE DEMO: the page.
   Where things live:
     css/style.css      colours and layout
-    js/app.js          what the page does (the part to read and tweak)
-    js/lib/            helper libraries (zstd, game table tools, mod generator). Normally not edited.
+    js/app.js          what the page does
+    js/lib/            helper libraries (zstd, game table tools, mod generator).
     data/items.json    the list of clothing types and items this demo adds
     models/            the 3D clothing models (.bfres.zs)
     textures/          texture files the models use
@@ -76,8 +76,8 @@
       <ul class="files" id="gameChecks"></ul>
       <p class="note err" id="versionWarn" hidden></p>
       <p>Need help with dumping your <code>romfs</code>? <br> 
-        <span class="note">You'll first need an emulator like Ryujinx. For Ryujinx users, load Tomodatchi Life: Living the Dream 
-          <span class="bold">with the 1.0.4 save</span> into the emulator, right-click on the game on the home screen, and go to to "Extract Data", then "RomFS". Choose a location for the game to put the dumped files. This will take a while!</span></p>
+        <span class="note">You'll first need an emulator like Ryujinx. For Ryujinx users, load Tomodachi Life: Living the Dream 
+          <span class="bold">with the 1.0.4 save</span> into the emulator, right-click on the game on the home screen, and go to "Extract Data", then "RomFS". Choose a location for the game to put the dumped files. This will take a while!</span></p>
     </section>
 
     <!-- Step 2: Player.sav -->
@@ -96,25 +96,89 @@
     <section class="card" aria-labelledby="s3">
       <div class="sh"><span class="n">3</span><h2 id="s3">Build</h2></div>
       <div class="row">
-        <button type="button" class="primary" id="build">Build my mod</button>
+        <button type="button" class="primary" id="build">Build My Mod!</button>
         <span id="buildHint"></span>
         <span class="note" id="problems"></span>
       </div>
       <div class="msg" id="log" hidden></div>
       <div id="result" hidden>
         <div class="row">
-          <button type="button" class="primary" id="save">Save the zip</button>
+          <button type="button" class="primary" id="save">Save The Zip</button>
           <span class="note" id="saveStatus"></span>
         </div>
-        <ol class="how">
-          <li>Copy the <code>ClosetForge_Mod</code> folder into <code>/contents/010051F0207B2000/</code>.</li>
-          <li><span class="bad">Back up your save file!</span></li>
-          <li>Copy <code>Player.sav</code> and the Ugc/ folder from the exported .zip file into your save directory. 
-            <br>For offical Switch hardware, I recommend using JKSV to back up and edit your save file.</li>
-        </ol>
+        <p class="note"><span class="bad">Back up your save file first!</span> Then follow the install steps below.</p>
       </div>
     </section>
+
+    <!-- Installing: the same steps as the README, in collapsible blocks so the page stays short -->
+    <section class="card" aria-labelledby="sInstall">
+      <div class="sh"><span class="n">&#10003;</span><h2 id="sInstall">Installing the mod</h2></div>
+      <p class="note">
+        <span class="bad">Anything you do between dumping the save file and installing the modified one will be lost!</span>
+        Extract the .zip file from the site first. Then follow the steps for where you play.
+      </p>
+
+      <details>
+        <summary>Switch hardware</summary>
+        <ol class="how">
+          <li>Connect your Switch's SD card to your PC, either physically, through USB file transfer, or an FTP server.</li>
+          <li>Copy the <code>ClosetForge_Mod\romfs</code> folder from the extracted .zip file into <code>atmosphere\contents\010051f0207b2000\</code> on your Switch's SD card. You don't need the <code>exefs</code> folder, as the file in there is for Ryujinx users. It won't crash your game if you leave it, however.</li>
+          <li>Copy the contents of <code>ClosetForge_OfficialHardware</code> to the root of your SD card. <b>This is important!</b> This contains the <code>exefs</code> patch that is required to run the mod.</li>
+          <li>Find your extracted save file. If using JKSV, this will be under <code>JKSV\Tomodachi Life Living the Dream\</code>. <b>Make sure to back up your original save file somewhere safe!</b></li>
+          <li>Extract the .zip file of the save you wish to edit, then copy <code>Player.sav</code> and the <code>Ugc\</code> folder from the Closet Forge Demo .zip file into your extracted save file.</li>
+          <li>Re-zip the save file directory on your PC. You can do this on Windows by selecting every file in your save directory, right-clicking the selected files, and selecting "Compress To -> ZIP File".</li>
+          <li>Copy the modified save .zip file onto your SD card. If using JKSV, place the .zip file in <code>JKSV\Tomodachi Life Living the Dream\</code> so that JKSV can read it.</li>
+          <li>Disconnect your Switch's SD card from your PC.</li>
+          <li>Use a save manager application like JKSV to restore the modified save file onto your Switch. If using JKSV, go to the application, select the user with the save file you wish to replace, select Tomodachi Life: Living the Dream, and select the modified save file .zip to restore to the game.</li>
+          <li>Launch Tomodachi Life: Living the Dream.</li>
+        </ol>
+      </details>
+
+      <details>
+        <summary>Ryujinx</summary>
+        <ol class="how">
+          <li>Open your Atmosphere mod directory. You can easily find this by opening Ryujinx, right-clicking Tomodachi Life: Living the Dream, and pressing "Open Atmosphere Mod Directory".</li>
+          <li>Place the <code>ClosetForge_Mod\</code> folder from the extracted .zip file into your Atmosphere mod directory.</li>
+          <li>Open your save file location. You can easily find this by opening Ryujinx, right clicking Tomodachi Life: Living the Dream, and pressing "Open User Save Directory".</li>
+          <li><b>Back up your original <code>Player.sav</code> file somewhere safe in case something breaks!</b></li>
+          <li>Copy the <code>Player.sav</code> file and the <code>Ugc\</code> folder from the extracted .zip file into the root of your save directory.</li>
+          <li>Launch Tomodachi Life: Living the Dream.</li>
+        </ol>
+      </details>
+
+      <p class="note">Uninstalling and troubleshooting are explained in the full instructions on <a class="repolink" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>.</p>
+    </section>
   </main>
+
+  <!-- ============================ Footer ============================ -->
+  <footer class="foot">
+    <div class="inner">
+      <p>
+        <b>AI disclaimer:</b> This project was assisted heavily by generative AI. I used Anthropic Claude (Sonnet 5.5) to assist with developing this mod.
+        The AI provided much of the coding for both the mod and the site. It also helped with reverse-engineering the game's data formats, and helped create the <code>exefs</code> patch used in the mod.
+        AI was not used to rip and edit the models and textures. I tested the mod in-game myself.
+      </p>
+      <p>
+        <b>Credits:</b> Miitomo models (Baggy Pants and Showbiz Jackets) and Miitopia models (Bee Helmet) were made by Nintendo.
+        The Bee Helmet model was ripped and posted on
+        <a href="https://models.spriters-resource.com/nintendo_switch/miitopia/asset/360973/" target="_blank" rel="noopener">The Models Resource</a> by Poké-Brother.
+        The Baggy Pants and Showbiz Jacket models were ripped from Miitomo by Tooby_Two.
+        Uses <a href="https://github.com/101arrowz/fzstd" target="_blank" rel="noopener">fzstd</a> (MIT License).
+      </p>
+      <p>
+        This is a fan project not affiliated with Nintendo.
+        Full instructions, troubleshooting and credits are on <a class="repolink" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- On GitHub Pages (https://<user>.github.io/<repo>/) the repository is at github.com/<user>/<repo>; point the GitHub links there. -->
+  <script>
+    if (location.hostname.endsWith('.github.io')) {
+      const repoUrl = 'https://github.com/Tooby-Two/ClosetForgeDemo';
+      document.querySelectorAll('a.repolink').forEach((a) => { a.href = repoUrl; });
+    }
+  </script>
 
   <!-- Libraries first (they define fzstd, TLCore and TLGen), then the page's own code -->
   <script src="js/lib/fzstd.js"></script>

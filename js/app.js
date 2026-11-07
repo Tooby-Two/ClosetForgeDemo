@@ -47,7 +47,7 @@ const REQUIRED_GAME_FILES = [
   ['cloth',      'Cloth.Product.100.rstbl.byml',           'RSDB/'],
   ['models',     'ClothModelParam.Product.100.rstbl.byml', 'RSDB/'],
   ['gdl',        'GameDataList.Product.100.byml',          'GameData/'],
-  ['rst',        'ResourceSizeTable.Product.100.Nin_NX_NVN.rsizetable', 'System/Resource'],
+  ['rst',        'ResourceSizeTable.Product.100.Nin_NX_NVN.rsizetable', 'System/Resource/'],
 ];
 
 const gameTables = {};   // key -> file bytes, filled as the user drops files
