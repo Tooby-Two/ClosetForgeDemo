@@ -149,7 +149,7 @@ The Baggy Pants and Showbiz Jacket models were ripped from Miitomo by Tooby_Two.
 
 ### Libraries
 
-fzstd (MIT License)
+fzstd (MIT License) ( https://github.com/101arrowz/fzstd )
 
 ### Applications
 
