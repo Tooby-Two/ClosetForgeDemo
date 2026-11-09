@@ -2,23 +2,25 @@
    CLOSET FORGE DEMO: the page's own code.
 
    What it does, in order:
-     1. Loads data/items.json (the list of clothing to add) and shows the pictures.
-     2. Lets the user drop their six game table files and their Player.sav.
-     3. On "Build": fetches the models/textures/paintings, assigns the next free
-        closet slots, runs the mod generator (js/lib/gen.js) and zips the result.
+     1. Loads data/items.json (the list of clothing to add) and mod/files.json
+        (the list of finished mod files), and shows the pictures.
+     2. Lets the user drop their Player.sav.
+     3. On "Build": gives each item the next free closet slot, writes those slots into
+        a copy of Player.sav (js/lib/save.js), and zips it together with the finished
+        mod files and the items' painting files (js/lib/zip.js).
      4. "Save the zip" downloads it.
 
-   Sections:  1 Setup  2 Required files  3 Loading the clothing list
-              4 Drop zones  5 Ready check  6 Build  7 Save
+   The mod files in mod/ are the same for everybody, so they are not built here.
+   Only Player.sav and the Ugc/ files depend on the person's save.
+
+   Sections:  1 Setup  2 What the page keeps track of  3 Loading the data files
+              4 The Player.sav drop zone  5 Ready check  6 Build  7 Save
    ==================================================================== */
 'use strict';
 
 // ------------------------------------------------------------------
 // 1. Setup and small helpers
 // ------------------------------------------------------------------
-// The game tables are zstd-compressed; give the helper library a decoder (fzstd, in js/lib).
-TLCore.setZstdDecoder((bytes) => fzstd.decompress(bytes));
-
 const $ = (id) => document.getElementById(id);
 const readFileBytes = (file) => file.arrayBuffer().then((buf) => new Uint8Array(buf));
 const escapeHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -38,35 +40,21 @@ $('themeBtn').onclick = () => {
 };
 
 // ------------------------------------------------------------------
-// 2. What the user has to provide
+// 2. What the page keeps track of
 // ------------------------------------------------------------------
-// [key used in code, file name to look for, folder in the game dump (shown as a hint)]
-const REQUIRED_GAME_FILES = [
-  ['typeparam',  'UgcTypeParam.Product.100.rstbl.byml',    'RSDB/'],
-  ['clothparam', 'UgcClothParam.Product.100.rstbl.byml',   'RSDB/'],
-  ['cloth',      'Cloth.Product.100.rstbl.byml',           'RSDB/'],
-  ['models',     'ClothModelParam.Product.100.rstbl.byml', 'RSDB/'],
-  ['gdl',        'GameDataList.Product.100.byml',          'GameData/'],
-  ['rst',        'ResourceSizeTable.Product.100.Nin_NX_NVN.rsizetable', 'System/Resource/'],
-];
-
-const gameTables = {};   // key -> file bytes, filled as the user drops files
 let save = null;         // { name, data } once Player.sav is loaded
 let freeSlots = [];      // closet slot numbers that are still empty in that save
 let clothing = null;     // the contents of data/items.json (set in section 3)
+let modFiles = null;     // the paths listed in mod/files.json (set in section 3)
 let itemCount = 0;       // how many closet items the pack adds (6)
-let orig = null;         // data/orig.json: stock table rows the generator starts from
-let knownFiles = null;   // data/known-files.json: fingerprints of the real v1.0.4 game files
-const fileMatches = {};  // key -> true (is the 1.0.4 file), false (is not), or missing (couldn't check)
 
 // ------------------------------------------------------------------
-// 3. Loading the clothing list and showing "What gets added"
+// 3. Loading the data files and showing "What gets added"
 // ------------------------------------------------------------------
 async function loadClothingList() {
   try {
     clothing = await (await fetch('data/items.json')).json();
-    orig = await (await fetch('data/orig.json')).json();
-    knownFiles = await (await fetch('data/known-files.json')).json().catch(() => null);   // optional: only used for the version warning
+    modFiles = (await (await fetch('mod/files.json')).json()).files;
   } catch (e) {
     // Browsers block a page opened straight from a folder (file://) from reading its own files.
     $('loadError').hidden = false;
@@ -74,7 +62,7 @@ async function loadClothingList() {
       ? 'Browsers do not let a page opened directly from a folder read its own data files. ' +
         'Put the site on a web server instead (GitHub Pages, or "Go Live" in the VS Code Live Server extension, ' +
         'or run  python -m http.server  in this folder and open http://localhost:8000).'
-      : 'Something went wrong while loading data/items.json: ' + e.message;
+      : 'Something went wrong while loading the data files: ' + e.message;
     return;
   }
   itemCount = clothing.types.reduce((n, type) => n + type.items.length, 0);
@@ -84,22 +72,8 @@ async function loadClothingList() {
   refreshBuildButton();
 }
 
-// Is this the real v1.0.4 file? We compare a SHA-256 fingerprint of the unzipped file with
-// data/known-files.json. Returns true / false, or undefined when it can't be checked.
-async function matchesGameVersion(key, zsBytes) {
-  const known = knownFiles && knownFiles[key];
-  if (!known || !(window.crypto && crypto.subtle)) return undefined;
-  try {
-    const bytes = TLCore.load(zsBytes);                                   // unzstd
-    if (bytes.length !== known.size) return false;
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
-    const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
-    return hex === known.sha256;
-  } catch (e) { return false; }                                           // not even a valid game file
-}
-
 // ------------------------------------------------------------------
-// 4. Drop zones (click, keyboard or drag and drop)
+// 4. The Player.sav drop zone (click, keyboard or drag and drop)
 // ------------------------------------------------------------------
 function wireDropZone(zone, input, onFiles) {
   zone.onclick = () => input.click();
@@ -110,44 +84,14 @@ function wireDropZone(zone, input, onFiles) {
   zone.ondrop = (e) => { e.preventDefault(); zone.classList.remove('over'); onFiles([...e.dataTransfer.files]); };
 }
 
-// Step 1: game files. We match by name, so a "3f983359-" style prefix doesn't matter.
-function drawGameChecklist() {
-  $('gameChecks').innerHTML = REQUIRED_GAME_FILES.map(([key, fileName, folder]) => `
-    <li class="${gameTables[key] ? (fileMatches[key] === false ? 'warn' : 'ok') : ''}">
-      <span class="dot"></span>
-      <div>
-        <div class="fn">${fileName}.zs</div>
-        <div class="where">${!gameTables[key] ? 'Not Loaded: located in the ' + folder + ' folder'
-          : fileMatches[key] === false ? 'Loaded, but this is not the 1.0.4 version of this file' : 'Loaded!'}</div>
-      </div>
-    </li>`).join('');
-  const wrong = REQUIRED_GAME_FILES.filter(([key]) => gameTables[key] && fileMatches[key] === false);
-  $('versionWarn').hidden = wrong.length === 0;
-  $('versionWarn').textContent = wrong.length === 0 ? '' :
-    `${wrong.length === 1 ? 'One of these files does' : wrong.length + ' of these files do'} not match the 1.0.4 game files. ` +
-    'A mod built from files of another game version can crash the game. Dump them again from the 1.0.4 update, ' +
-    "and make sure they're the original files, not ones from another mod. You can still build, at your own risk.";
-  refreshBuildButton();
-}
-wireDropZone($('dropGame'), $('fileGame'), async (files) => {
-  for (const file of files) {
-    const match = REQUIRED_GAME_FILES.find(([, fileName]) => file.name.includes(fileName));
-    if (match) {
-      gameTables[match[0]] = await readFileBytes(file);
-      fileMatches[match[0]] = await matchesGameVersion(match[0], gameTables[match[0]]);
-    }
-  }
-  drawGameChecklist();
-});
-
-// Step 2: Player.sav. We look for closet slots that are still empty.
+// Player.sav. We look for closet slots that are still empty.
 wireDropZone($('dropSave'), $('fileSave'), async (files) => {
   if (!files[0]) return;
   save = { name: files[0].name, data: await readFileBytes(files[0]) };
   freeSlots = [];
   try {
-    const items = TLGen.parseSave(save.data);      // existing clothing designs
-    freeSlots = TLGen.emptySlots(save.data);       // unused closet slots
+    const items = TLSave.parseSave(save.data);      // existing clothing designs
+    freeSlots = TLSave.emptySlots(save.data);       // unused closet slots
     $('saveInfo').textContent = `${save.name} loaded! ${items.length} clothing items found, ${freeSlots.length} free closet slots!`;
   } catch (e) {
     save = null;
@@ -161,8 +105,7 @@ wireDropZone($('dropSave'), $('fileSave'), async (files) => {
 // ------------------------------------------------------------------
 function listProblems() {
   const problems = [];
-  if (!clothing || !orig) problems.push("The page's data files did not load");
-  if (REQUIRED_GAME_FILES.some(([key]) => !gameTables[key])) problems.push('Add all six game files');
+  if (!clothing || !modFiles) problems.push("The page's data files did not load");
   if (!save) problems.push('Add Player.sav');
   else if (clothing && freeSlots.length < itemCount) {
     problems.push(`Your save only has ${freeSlots.length} free closet slot${freeSlots.length === 1 ? '' : 's'} and this pack needs ${itemCount}. ` +
@@ -179,7 +122,7 @@ function refreshBuildButton() {
 }
 
 // ------------------------------------------------------------------
-// 6. Build: generate the mod files and the edited Player.sav, then zip them
+// 6. Build: edit Player.sav, collect the Ugc files and the mod files, then zip them
 // ------------------------------------------------------------------
 let outputZip = null;
 let outputName = 'ClosetForge_Mod.zip';
@@ -187,32 +130,6 @@ const timestamp = () => {
   const d = new Date(), p = (n) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`;
 };
-
-// Turns one entry of data/items.json into what the generator wants, fetching its files.
-// A model that uses a normal map must have its texture reference pointed at that map's name.
-// If the model file already does (e.g. it was saved from a build), it is used untouched.
-async function prepareType(type) {
-  let modelBytes = await fetchBytes(type.model);
-  if (type.normalMapName) {
-    const raw = TLCore.load(modelBytes);                                              // unzstd
-    if (!TLCore.dec.decode(raw).includes(type.normalMapName)) {
-      const inner = TLGen.detectModelName(raw, type.modelName.replace(/\.bfres(\.zs)?$/, ''), type.stockName);
-      modelBytes = TLCore.zstdRaw(TLGen.retexture(raw, inner, { nrm: type.normalMapName }));
-    }
-  }
-  const extraFiles = await Promise.all(type.files.map(async (f) => ({ path: f.path, data: await fetchBytes(f.url), rst: f.rst })));
-  return {
-    name: type.name,
-    category: type.category,                              // top / bottom / hat
-    model: { name: type.modelName, data: modelBytes },
-    model_internal: type.innerName,                       // the model's own name inside the file; the game loads Tex/<name>_Body_Alb and Tex/Lo/<name> from it
-    extra_files: extraFiles,
-    preview: 'own', uv_mask: '', no_in: false, variants: 0,
-    // Which parts of the Mii's bare body the game hides under this clothing.
-    // Leave out for the game's default. Example: model_flags: { BodyBaseCutline: 889516920 }
-    model_flags: type.bodyCutline ? { BodyBaseCutline: Number(type.bodyCutline) } : undefined,
-  };
-}
 
 $('build').onclick = async () => {
   const log = $('log');
@@ -224,9 +141,7 @@ $('build').onclick = async () => {
     const slotTypes = {};      // slot number -> type name (written into Player.sav)
     const slotNames = {};      // slot number -> item name shown in the game
     const ugcFiles = [];       // painting + thumbnail files for the game's Ugc folder
-    const typesForGenerator = [];
     for (const type of clothing.types) {
-      typesForGenerator.push(await prepareType(type));
       for (const item of type.items) {
         const slot = freeSlots[nextFree++];
         const fileBase = 'Ugc/UgcCloth' + String(slot).padStart(3, '0');
@@ -240,35 +155,27 @@ $('build').onclick = async () => {
       }
     }
 
-    const result = TLGen.generate({
-      orig,
-      tables: gameTables,
-      types: typesForGenerator,
-      save: { data: save.data, slots: slotTypes, names: slotNames },
-    });
+    // The edited Player.sav, with the new types in those slots.
+    const edited = TLSave.writeSlots(save.data, slotTypes, slotNames);
 
-    // Collect everything into the zip's folder layout.
-    const seen = new Set();
-    const files = result.files.filter((f) => !seen.has(f.path) && seen.add(f.path));
-    const zipFiles = [];
-    for (const f of files) {
-      if (f.path === 'Player.sav') continue;                                    // goes at the zip root, below
-      if (f.path.startsWith('for_real_switch/')) zipFiles.push({ path: 'ClosetForge_OfficialHardware/' + f.path.slice('for_real_switch/'.length), data: f.data });
-      else zipFiles.push({ path: 'ClosetForge_Mod/' + f.path, data: f.data });
-    }
-    zipFiles.push({ path: 'Player.sav', data: files.find((f) => f.path === 'Player.sav').data });
-    zipFiles.push(...ugcFiles);
-    zipFiles.push({ path: 'README.txt', data: TLCore.enc.encode(readmeText(slotNames)) });
+    // The finished mod files (mod/ClosetForge_Mod/..., mod/ClosetForge_OfficialHardware/...), unchanged.
+    const modZipFiles = await Promise.all(modFiles.map(async (path) => ({ path, data: await fetchBytes('mod/' + path) })));
 
-    outputZip = TLCore.zipStore(zipFiles);
+    const zipFiles = [
+      ...modZipFiles,
+      { path: 'Player.sav', data: edited.data },
+      ...ugcFiles,
+      { path: 'README.txt', data: new TextEncoder().encode(readmeText(slotNames)) },
+    ];
+
+    outputZip = TLZip.store(zipFiles);
     outputName = 'ClosetForge_Mod_' + timestamp() + '.zip';
     log.className = 'msg good';
-    log.textContent = result.log.join('\n') + `\n\nDone. ${zipFiles.length} files, ${(outputZip.length / 1048576).toFixed(1)} MB.`;
+    log.textContent = edited.log.join('\n') + `\n\nDone. ${zipFiles.length} files, ${(outputZip.length / 1048576).toFixed(1)} MB.`;
     $('result').hidden = false;
   } catch (e) {
     log.className = 'msg err';
-    log.textContent = 'Could not build: ' + e.message +
-      (/already exists/.test(e.message) ? '\nThese game files look like they came from a mod. Use the original, unmodded files from your game dump.' : '');
+    log.textContent = 'Could not build: ' + e.message;
   }
 };
 
@@ -281,7 +188,7 @@ function readmeText(slotNames) {
     'Items added:',
     itemList,
     '',
-    'Anything you do in the game between dumping your save file and installing the modified save will be lost!',
+    'ANYTHING YOU DO IN THE GAME BETWEEN DUMPING YOUR SAVE FILE AND INSTALLING THE MODIFIED ONE WILL BE LOST!',
     'Make sure to back up your original save file somewhere safe!',
     '',
     '------------------------------------------------------------',
@@ -320,7 +227,7 @@ function readmeText(slotNames) {
     'Uninstall',
     '------------------------------------------------------------',
     'To remove the new clothing types while keeping your save, remove them in-game in the Palette House first.',
-    'If you do not, removing the mod folders may cause the game to crash!',
+    'If you do not, removing the mod folders will cause the game to crash!',
     'You may also restore your original save to revert it to before the modifications.',
     'Then remove the ClosetForge_Mod folder from your mod directory, and on Switch hardware also remove the',
     'exefs patch from atmosphere\\exefs_patches\\closet_forge\\',
@@ -346,5 +253,4 @@ $('save').onclick = () => {
 // ------------------------------------------------------------------
 // Start
 // ------------------------------------------------------------------
-drawGameChecklist();
 loadClothingList();

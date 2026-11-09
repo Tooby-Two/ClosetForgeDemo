@@ -46,7 +46,7 @@
 
   <main class="inner" style="align-items: center;">
     <p class="lede" style="text-align: center;">
-      Adds six ready-made clothing items to your save! <br>Add your game files and Player.sav, build, and copy the result into your game.
+      Adds six ready-made clothing items to your save! <br>Add your Player.sav, build, and copy the result into your game.
     </p>
 
     <!-- Shown only if the page's own files could not be loaded (see js/app.js) -->
@@ -65,24 +65,9 @@
       <div class="gal" id="gallery"></div>
     </section>
 
-    <!-- Step 1: the six game files -->
+    <!-- Step 1: Player.sav -->
     <section class="card" aria-labelledby="s1">
-      <div class="sh"><span class="n">1</span><h2 id="s1">Game files</h2></div>
-      <p class="note">
-        Open your game dump's <code>romfs</code> folder and select these six files together. <span class="bold">These need to be from the 1.0.4 update!</span>
-      </p>
-      <div class="drop" id="dropGame" tabindex="0" role="button">Drop the six game files here or <b>click to choose</b></div>
-      <input type="file" id="fileGame" multiple hidden>
-      <ul class="files" id="gameChecks"></ul>
-      <p class="note err" id="versionWarn" hidden></p>
-      <p>Need help with dumping your <code>romfs</code>? <br> 
-        <span class="note">You'll first need an emulator like Ryujinx. For Ryujinx users, load Tomodachi Life: Living the Dream 
-          <span class="bold">with the 1.0.4 save</span> into the emulator, right-click on the game on the home screen, and go to "Extract Data", then "RomFS". Choose a location for the game to put the dumped files. This will take a while!</span></p>
-    </section>
-
-    <!-- Step 2: Player.sav -->
-    <section class="card" aria-labelledby="s2">
-      <div class="sh"><span class="n">2</span><h2 id="s2">Your save file</h2></div>
+      <div class="sh"><span class="n">1</span><h2 id="s1">Your save file</h2></div>
       <p class="note">
         Drop your <code>Player.sav</code>. The six new items go into the next free closet slots, so your original clothes
         are not touched. <br> The mod comes exported with a new save file, so you won't lose your original save.
@@ -92,9 +77,9 @@
       <div class="note" id="saveInfo"></div>
     </section>
 
-    <!-- Step 3: build + download -->
-    <section class="card" aria-labelledby="s3">
-      <div class="sh"><span class="n">3</span><h2 id="s3">Build</h2></div>
+    <!-- Step 2: build + download -->
+    <section class="card" aria-labelledby="s2">
+      <div class="sh"><span class="n">2</span><h2 id="s2">Build</h2></div>
       <div class="row">
         <button type="button" class="primary" id="build">Build My Mod!</button>
         <span id="buildHint"></span>
@@ -163,7 +148,6 @@
         The Bee Helmet model was ripped and posted on
         <a href="https://models.spriters-resource.com/nintendo_switch/miitopia/asset/360973/" target="_blank" rel="noopener">The Models Resource</a> by Poké-Brother.
         The Baggy Pants and Showbiz Jacket models were ripped from Miitomo by Tooby_Two.
-        Uses <a href="https://github.com/101arrowz/fzstd" target="_blank" rel="noopener">fzstd</a> (MIT License).
       </p>
       <p>
         This is a fan project not affiliated with Nintendo.
@@ -180,12 +164,9 @@
     }
   </script>
 
-  <!-- Libraries first (they define fzstd, TLCore and TLGen), then the page's own code -->
-  <script src="js/lib/fzstd.js"></script>
-  <script src="js/lib/zstdc.js"></script>
-  <script src="js/lib/core.js"></script>
-  <script src="js/lib/patch.js"></script>
-  <script src="js/lib/gen.js"></script>
+  <!-- The two helper libraries first (they define TLSave and TLZip), then the page's own code -->
+  <script src="js/lib/save.js"></script>
+  <script src="js/lib/zip.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

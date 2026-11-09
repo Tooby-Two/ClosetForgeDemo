@@ -1,39 +1,8 @@
 {
-  "_about": "Everything the demo adds. Edit labels or swap files here; see README.md.",
+  "_about": "Everything the demo adds: the clothing types and the items in each. Edit labels or swap painting files here (see README.md). The game files that define the types are in mod/.",
   "types": [
     {
       "name": "BaggyPants",
-      "category": "bottom",
-      "stockName": "ClothBottomsUgcPantsLong",
-      "model": "models/BaggyPants.bfres.zs",
-      "modelName": "BaggyPants.bfres.zs",
-      "normalMapName": "TLN_BaggyPants_Nrm______________",
-      "files": [
-        {
-          "url": "textures/BaggyPants/normal-map.bntx.zs",
-          "path": "romfs/Tex/TLN_BaggyPants_Nrm______________.bntx.zs",
-          "rst": [
-            "Tex/TLN_BaggyPants_Nrm______________.bntx",
-            614736
-          ]
-        },
-        {
-          "url": "textures/BaggyPants/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/TLM_BaggyPants_________g_Body_Alb.bntx.zs",
-          "rst": [
-            "Tex/TLM_BaggyPants_________g_Body_Alb.bntx",
-            282960
-          ]
-        },
-        {
-          "url": "textures/BaggyPants/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/TLM_BaggyPants_________g.bntx.zs",
-          "rst": [
-            "Tex/Lo/TLM_BaggyPants_________g.bntx",
-            86376
-          ]
-        }
-      ],
       "items": [
         {
           "label": "White Baggy Pants",
@@ -49,34 +18,10 @@
           "canvas": "paintings/red-baggy-pants.canvas.zs",
           "thumbnail": "paintings/red-baggy-pants.thumb.ugctex.zs"
         }
-      ],
-      "innerName": "TLM_BaggyPants_________g"
+      ]
     },
     {
       "name": "BeeHat",
-      "category": "hat",
-      "stockName": "ClothHeadwearHatUgcBoater",
-      "model": "models/BeeHelmet.bfres.zs",
-      "modelName": "BeeHelmet.bfres.zs",
-      "normalMapName": null,
-      "files": [
-        {
-          "url": "textures/BeeHat/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/TLM_BeeHat______________r_Body_Alb.bntx.zs",
-          "rst": [
-            "Tex/TLM_BeeHat______________r_Body_Alb.bntx",
-            282960
-          ]
-        },
-        {
-          "url": "textures/BeeHat/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/TLM_BeeHat______________r.bntx.zs",
-          "rst": [
-            "Tex/Lo/TLM_BeeHat______________r.bntx",
-            37200
-          ]
-        }
-      ],
       "items": [
         {
           "label": "Yellow Bee Helmet",
@@ -92,42 +37,10 @@
           "canvas": "paintings/blue-bee-helmet.canvas.zs",
           "thumbnail": "paintings/blue-bee-helmet.thumb.ugctex.zs"
         }
-      ],
-      "innerName": "TLM_BeeHat______________r"
+      ]
     },
     {
       "name": "FancyShirt",
-      "category": "top",
-      "stockName": "ClothTopsUgcTshirtLong",
-      "model": "models/WildShowbizJacket.bfres.zs",
-      "modelName": "WildShowbizJacket.bfres.zs",
-      "normalMapName": "TLN_FancyShirt_Nrm______________",
-      "files": [
-        {
-          "url": "textures/FancyShirt/normal-map.bntx.zs",
-          "path": "romfs/Tex/TLN_FancyShirt_Nrm______________.bntx.zs",
-          "rst": [
-            "Tex/TLN_FancyShirt_Nrm______________.bntx",
-            614736
-          ]
-        },
-        {
-          "url": "textures/FancyShirt/blank-albedo.bntx.zs",
-          "path": "romfs/Tex/TLM_FancyShirt_______g_Body_Alb.bntx.zs",
-          "rst": [
-            "Tex/TLM_FancyShirt_______g_Body_Alb.bntx",
-            282960
-          ]
-        },
-        {
-          "url": "textures/FancyShirt/low-detail.bntx.zs",
-          "path": "romfs/Tex/Lo/TLM_FancyShirt_______g.bntx.zs",
-          "rst": [
-            "Tex/Lo/TLM_FancyShirt_______g.bntx",
-            135552
-          ]
-        }
-      ],
       "items": [
         {
           "label": "Wild Showbiz Jacket",
@@ -143,8 +56,7 @@
           "canvas": "paintings/red-showbiz-jacket.canvas.zs",
           "thumbnail": "paintings/red-showbiz-jacket.thumb.ugctex.zs"
         }
-      ],
-      "innerName": "TLM_FancyShirt_______g"
+      ]
     }
   ]
 }
