@@ -32,7 +32,7 @@ If using JKSV, you will need to open the application on your Switch, select the 
 
 On your save file, you will need six empty UGC clothing slots. If you are close to or at the limit, you will need to delete some of your clothes in-game. The site will alert you if you do not have enough UGC slots available.
 
-You will also have to provide the six files below yourself by extracting the `romfs` folder from your game. The easiest way to do this is through an emulator like Ryujinx. On Ryujinx, right-click Tomodachi Life: Living the Dream **with the 1.0.4 update installed** and select "Extract Data -> RomFS". Choose a directory for it to extract to, then wait for the extraction to finish.
+**UPDATE:** There is now no need to provide the six files from `romfs`! The site will generate all of the required files for you. The files the site updates are below, and will be required for the full tool's release:
 
 | File and location | What it does | What the mod changes |
 | ---| --- | --- |
@@ -112,10 +112,6 @@ You may also restore your original save to revert it back to before the modifica
 ## Notes
 
 ### Troubleshooting
-
-**Why am I getting the error "not the 1.0.4 version" on the site?**
-- This is because one or more of the six required `romfs` files are not the files from the 1.0.4 update. The 1.0.4 update changes the files from the base game. Extract the `romfs` again with the 1.0.4 update installed.
-- If the `romfs` files are not the base game's files, and were modified previously by another mod, they will not function properly on the site. Make sure you use the unmodified game files.
 
 **The game crashes on load!**
 - Check that your mod directory has the correct build the site generated. 
